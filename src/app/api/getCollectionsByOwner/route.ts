@@ -10,7 +10,7 @@ export async function POST(request: Request) {
         const collectionOwner = new PublicKey(body.collectionOwner);
 
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST http://localhost:3000/api/getCollectionsByOwner -H "Content-Type: application/json" -d '{"collectionOwner": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/getCollectionsByOwner -H "Content-Type: application/json" -d '{"collectionOwner": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 
