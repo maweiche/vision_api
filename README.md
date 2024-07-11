@@ -2,11 +2,16 @@
 
 ### /api/getCollectionsByOwner
 
-POST BODY: {
+POST BODY: 
+```tsx
+{
     collectionOwner: string
 }
+```
 
-RESPONSE: {
+RESPONSE: 
+```tsx
+{
     "collection": {
         "reference":"mwUt7aCktvBeSm8bry6TvqEcNSUGtxByKCbBKfkxAzA",
         "name":"Test 12 Collection",
@@ -22,46 +27,66 @@ RESPONSE: {
         "stableId":"TS2233321T"
     }
 }
+```
+
 
 ### /api/claim
 
-POST BODY: {
+POST BODY: 
+```tsx
+{
     collectionOwner: string
     publicKey: string // user
 }
+```
 
-RESPONSE: {
+RESPONSE: 
+```tsx
+{
     "transactions": [{
         "tx_signature": "123565432345",
         "nft_mint": "12345654"
     }]
 }
+```
 
 ### /api/mint
 
-POST BODY: {
+POST BODY: 
+```tsx
+{
     id: number;
     collectionOwner: string
     publicKey: string // user
 }
+```
 
-RESPONSE: {
+RESPONSE: 
+```tsx
+{
     "transactions": [{
         "tx_signature": "123565432345",
         "placeholder_mint": "12345654"
     }]
 }
+```
 
 ### /api/finalize
 
-POST BODY: {
+POST BODY: 
+```tsx
+{
     collectionOwner: string,
     placeholder_mint: string
 }
+```
 
-RESPONSE: {
+RESPONSE: 
+```tsx
+{
     "transactions": [{
         "tx_signature": "123565432345",
         "nft_mint": "12345654"
     }]
 }
+```
