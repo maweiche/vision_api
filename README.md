@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# API Endpoints for Vision SDK
 
-## Getting Started
+### /api/getCollectionsByOwner
 
-First, run the development server:
+POST BODY: {
+    collectionOwner: string
+}
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+RESPONSE: {
+    "collection": {
+        "reference":"mwUt7aCktvBeSm8bry6TvqEcNSUGtxByKCbBKfkxAzA",
+        "name":"Test 12 Collection",
+        "symbol":"TS5T",
+        "owner":"6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e",
+        "url":"https://amin.stable-dilution.art/nft/item/generation/3/",
+        "saleStartTime":"01909d8d76c3",
+        "saleEndTime":"0190a2b3d2c3",
+        "maxSupply":"64",
+        "totalSupply":"0e",
+        "mintCount":"01",
+        "price":1,
+        "stableId":"TS2233321T"
+    }
+}
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### /api/claim
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+POST BODY: {
+    collectionOwner: string
+    publicKey: string // user
+}
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+RESPONSE: {
+    "transactions": [{
+        "tx_signature": "123565432345",
+        "nft_mint": "12345654"
+    }]
+}
 
-## Learn More
+### /api/mint
 
-To learn more about Next.js, take a look at the following resources:
+POST BODY: {
+    id: number;
+    collectionOwner: string
+    publicKey: string // user
+}
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+RESPONSE: {
+    "transactions": [{
+        "tx_signature": "123565432345",
+        "placeholder_mint": "12345654"
+    }]
+}
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### /api/finalize
 
-## Deploy on Vercel
+POST BODY: {
+    collectionOwner: string,
+    placeholder_mint: string
+}
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+RESPONSE: {
+    "transactions": [{
+        "tx_signature": "123565432345",
+        "nft_mint": "12345654"
+    }]
+}
