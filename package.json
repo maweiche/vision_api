@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "start-prod": "next start -p 9100",
     "lint": "next lint"
   },
   "dependencies": {
