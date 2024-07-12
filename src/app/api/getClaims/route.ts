@@ -13,7 +13,7 @@ export async function POST(request: Request) {
         const buyer = new PublicKey(body.publicKey);
         
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN", "publicKey": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9", "publicKey": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 
