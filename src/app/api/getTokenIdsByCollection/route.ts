@@ -3,7 +3,6 @@ import { Keypair, Connection, PublicKey, MemcmpFilter, GetProgramAccountsConfig 
 import { getTokenMetadata } from "@solana/spl-token";
 import { SDK } from '@maweiche/react-sdk';
 import base58, * as bs58 from "bs58";
-import { token } from "@coral-xyz/anchor/dist/cjs/utils";
 
 export async function POST(request: Request) {
     let sdk: SDK;
