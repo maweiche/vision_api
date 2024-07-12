@@ -51,7 +51,11 @@ export async function POST(request: Request) {
           );
           console.log('all_nfts', all_nfts)
       
-      
+          if(all_nfts.length === 0) {
+            return new Response(JSON.stringify({
+                tokenIds: []
+            }), { status: 200 });
+          }
           const all_nfts_decoded = all_nfts.map((nft: any) => {
               try {
                   const decode = sdk.program.coder.accounts.decode("AiNft", nft.account.data);

@@ -3,7 +3,6 @@ import { Keypair, Connection, PublicKey, GetProgramAccountsFilter } from '@solan
 import { TOKEN_2022_PROGRAM_ID, getTokenMetadata } from "@solana/spl-token";
 import { SDK } from '@maweiche/react-sdk';
 import base58, * as bs58 from "bs58";
-import { token } from "@coral-xyz/anchor/dist/cjs/utils";
 
 export async function POST(request: Request) {
     let sdk: SDK;
@@ -14,7 +13,7 @@ export async function POST(request: Request) {
         const buyer = new PublicKey(body.publicKey);
         
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST http://localhost:3000/api/finalize -H "Content-Type: application/json" -d '{"collectionOwner": "9p2Zp5Uf5xGJ7rV7t2r1fQ8LwX7c9Zr7v7v7v7v7v7", "publicKey": "9p2Zp5Uf5xGJ7rV7t2r1fQ8LwX7c9Zr7v7v7v7v7v7", "placeholderMint": "9p2Zp5Uf5xGJ7rV7t2r1fQ8LwX7c9Zr7v7v7v7v7v7"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN", "publicKey": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 
@@ -50,8 +49,12 @@ export async function POST(request: Request) {
             {filters: filters}
         );
 
-        const _tokenIds = [];
-
+        const _tokenIds: any = [];
+        if( accounts.length === 0 ) {
+            return new Response(JSON.stringify({
+                tokens: _tokenIds
+            }), { status: 200 });
+        };
         for( let i = 0; i < accounts.length; i++ ) {
             //Parse the account data
             const parsedAccountInfo:any = accounts[i].account.data;
