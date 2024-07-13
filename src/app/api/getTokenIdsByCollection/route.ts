@@ -11,11 +11,9 @@ export async function POST(request: Request) {
         const collectionOwner = new PublicKey(body.collectionOwner);
 
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "Gu3mpF2bEdKxbavC89B931CsVanR5DPjcDx15ptb2nDp"}'
-                // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9", "publicKey": "H21y6LmZkGmBU9k6defd"}'
-                // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9", "publicKey": "H21y6LmZkGmBU9k6defd"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9"}'
 
-                // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "Gu3mpF2bEdKxbavC89B931CsVanR5DPjcDx15ptb2nDp", "publicKey": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9"}'
         const keypair1 = process.env.ADMINKEYPAIR as string;
 
         const admin = Keypair.fromSecretKey(base58.decode(keypair1));
