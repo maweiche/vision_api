@@ -11,8 +11,8 @@ export async function POST(request: Request) {
         const collectionOwner = new PublicKey(body.collectionOwner);
 
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9"}'
-        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
+        // curl -X POST http://localhost:3000/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 
@@ -28,6 +28,7 @@ export async function POST(request: Request) {
             "devnet",
         );
         const collection = PublicKey.findProgramAddressSync([Buffer.from('collection'), collectionOwner.toBuffer()], sdk.program.programId)[0];
+        // const collection = new PublicKey("2xYCWnRvpVf2yk2PcPphJzABqn7PQ4FWmAjWHKXKXp22")
         console.log('sdk program', sdk.program.programId.toBase58())
         console.log('collection', collection.toBase58())
 

@@ -13,7 +13,8 @@ export async function POST(request: Request) {
         const buyer = new PublicKey(body.publicKey);
         
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9", "publicKey": "H21y6LmZkGmBU9k6YzCRB1MpSnMoXHVtiuCxtTqS87w9"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/getClaims -H "Content-Type: application/json" -d '{"collectionOwner": "BdP8KyTAFmEF2L8DTufgYxQKr3V9ZBBgmfBRcqnFke1t", "publicKey": "6Y8AFH7EwyfLkWov2ziYD6Yut7dDgbfNCavmU5rePqHX"}'
+        // curl -X POST http://localhost:3000/api/getClaims -H "Content-Type: application/json" -d '{"collectionOwner": "BdP8KyTAFmEF2L8DTufgYxQKr3V9ZBBgmfBRcqnFke1t", "publicKey": "6Y8AFH7EwyfLkWov2ziYD6Yut7dDgbfNCavmU5rePqHX"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 
@@ -66,14 +67,14 @@ export async function POST(request: Request) {
             if (_token_metadata!.additionalMetadata.length < 6  || tokenBalance == 0  ) {
               continue;
             }
-    
+            console.log('all additional metadata', _token_metadata!.additionalMetadata)
             const collection_key = _token_metadata!.additionalMetadata[5][1]
     
             //Log results
-            console.log(`Token Account No. ${i + 1}: ${accounts[i].pubkey.toString()}`);
-            console.log(`--Token Mint: ${mintAddress}`);
-            console.log(`--Token Balance: ${tokenBalance}`);
-            console.log(`--Collection Key: ${collection_key}`);
+            // console.log(`Token Account No. ${i + 1}: ${accounts[i].pubkey.toString()}`);
+            // console.log(`--Token Mint: ${mintAddress}`);
+            // console.log(`--Token Balance: ${tokenBalance}`);
+            // console.log(`--Collection Key: ${collection_key}`);
     
             if( collection_key === collection.toBase58() ) {
                 console.log('We have a match: ', mintAddress)
@@ -91,6 +92,8 @@ export async function POST(request: Request) {
                 _tokenIds.push(token_id);
             }
         }
+
+        console.log('all token ids', _tokenIds)
 
         return new Response(JSON.stringify({
             tokens: _tokenIds

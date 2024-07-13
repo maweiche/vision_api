@@ -50,7 +50,15 @@ export async function POST(request: Request) {
         );
 
         const completedTxns = [];
+        if( accounts.length === 0 ) {
+            return new Response(JSON.stringify({
+                txn_signature: []
+            }), { status: 200 });
+        }
 
+        const all_token_ids = [];
+
+        for( let i = 0; i < accounts.length; i++ ) {
             //Parse the account data
             const parsedAccountInfo:any = accounts[0].account.data;
             const mintAddress:string = parsedAccountInfo["parsed"]["info"]["mint"];
@@ -71,7 +79,7 @@ export async function POST(request: Request) {
             console.log(`--Token Mint: ${mintAddress}`);
             console.log(`--Token Balance: ${tokenBalance}`);
             console.log(`--Collection Key: ${collection_key}`);
-    
+            
             if( collection_key === collection.toBase58() ) {
                 console.log('We have a match: ', mintAddress)
 
@@ -84,46 +92,55 @@ export async function POST(request: Request) {
                 console.log('placeholder mint', placeholder_mint);
                 console.log('placeholder token id', token_id);
 
-                const getCollectionUrl = async(collection: PublicKey) => {
-                    const collection_data = await connection.getAccountInfo(collection);
-                    const collection_decode = sdk.program.coder.accounts.decode("Collection", collection_data!.data);
-                    console.log('collection_decode', collection_decode)
-                    return {
-                        url: collection_decode.url,
-                        count: collection_decode.mintCount.toNumber(),
-                        owner: collection_decode.owner,
-                    }
-                }
-                const { url, owner } = await getCollectionUrl(collection);
-                console.log('URL TO POLL: ',`${url}/${token_id}/${buyer.toBase58()}`)
-
-
-                
-                const {tx_signature, nft_mint} = await sdk.nft.createNft(
-                    connection,  // connection: Connection,
-                    process.env.BEARER!, // bearer
-                    admin, // admin
-                    collectionOwner, // collection owner
-                    buyer, // buyer    
-                    placeholder_mint // placeholder mint address
-                ); // returns txn signature and nft mint address
-        
-
-                console.log(`nft mint: ${nft_mint}`);
-
-                console.log(`nft tx url: https://explorer.solana.com/tx/${tx_signature}?cluster=${sdk.cluster}`);
-
-                const _tx_obj = {
-                    tx_signature: tx_signature as string,
-                    nft_mint: nft_mint as string,
-                }
-
-                completedTxns.push(_tx_obj);
+                all_token_ids.push({
+                    token_id: token_id,
+                    placeholder_mint: placeholder_mint,
+                })
             }
 
-        return new Response(JSON.stringify({
-            transactions: completedTxns
-        }), { status: 200 });
+        }
+
+        // sort the all_token_ids array and grab the element with the lowest token_id
+        all_token_ids.sort((a: any, b: any) => a.token_id - b.token_id);
+        const { token_id, placeholder_mint } = all_token_ids[0];
+     
+
+            const getCollectionUrl = async(collection: PublicKey) => {
+                const collection_data = await connection.getAccountInfo(collection);
+                const collection_decode = sdk.program.coder.accounts.decode("Collection", collection_data!.data);
+                console.log('collection_decode', collection_decode)
+                return {
+                    url: collection_decode.url,
+                    count: collection_decode.mintCount.toNumber(),
+                    owner: collection_decode.owner,
+                }
+            }
+            const { url, owner } = await getCollectionUrl(collection);
+            console.log('URL TO POLL: ',`${url}/${token_id}/${buyer.toBase58()}`)
+
+
+            
+            const {tx_signature, nft_mint} = await sdk.nft.createNft(
+                connection,  // connection: Connection,
+                process.env.BEARER!, // bearer
+                admin, // admin
+                collectionOwner, // collection owner
+                buyer, // buyer    
+                placeholder_mint // placeholder mint address
+            ); // returns txn signature and nft mint address
+    
+
+            console.log(`nft mint: ${nft_mint}`);
+
+            console.log(`nft tx url: https://explorer.solana.com/tx/${tx_signature}?cluster=${sdk.cluster}`);
+
+            const _tx_obj = {
+                tx_signature: tx_signature as string,
+                nft_mint: nft_mint as string,
+            }
+    
+
+        return new Response(JSON.stringify(_tx_obj), { status: 200 });
     } catch (error) {
         return new Response(error as string, { status: 500 });
     }
