@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         
         // CREATE A curl command with the above body to this endpoint
         // curl -X POST https://vision-api-ecru.vercel.app/api/getClaims -H "Content-Type: application/json" -d '{"collectionOwner": "BdP8KyTAFmEF2L8DTufgYxQKr3V9ZBBgmfBRcqnFke1t", "publicKey": "6Y8AFH7EwyfLkWov2ziYD6Yut7dDgbfNCavmU5rePqHX"}'
-        // curl -X POST http://localhost:3000/api/getClaims -H "Content-Type: application/json" -d '{"collectionOwner": "BdP8KyTAFmEF2L8DTufgYxQKr3V9ZBBgmfBRcqnFke1t", "publicKey": "6Y8AFH7EwyfLkWov2ziYD6Yut7dDgbfNCavmU5rePqHX"}'
+        // curl -X POST http://localhost:3000/api/getClaims -H "Content-Type: application/json" -d '{"collectionOwner": "HZxkqBTnXtAYoFTg2puo9KyiNN42E8Sd2Kh1jq3vT29u", "publicKey": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 

@@ -1,4 +1,5 @@
 import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
+import * as anchor from "@coral-xyz/anchor";
 import { Keypair, Connection, PublicKey, GetProgramAccountsFilter } from '@solana/web3.js';
 import { TOKEN_2022_PROGRAM_ID, getTokenMetadata } from "@solana/spl-token";
 import { SDK } from '@maweiche/react-sdk';
@@ -13,7 +14,7 @@ export async function POST(request: Request) {
         const buyer = new PublicKey(body.publicKey);
         
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST http://localhost:3000/api/finalize -H "Content-Type: application/json" -d '{"collectionOwner": "9p2Zp5Uf5xGJ7rV7t2r1fQ8LwX7c9Zr7v7v7v7v7v7", "publicKey": "9p2Zp5Uf5xGJ7rV7t2r1fQ8LwX7c9Zr7v7v7v7v7v7", "placeholderMint": "9p2Zp5Uf5xGJ7rV7t2r1fQ8LwX7c9Zr7v7v7v7v7v7"}'
+        // curl -X POST http://localhost:3000/api/claim -H "Content-Type: application/json" -d '{"collectionOwner": "HZxkqBTnXtAYoFTg2puo9KyiNN42E8Sd2Kh1jq3vT29u", "publicKey": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
         );
 
         const collection = PublicKey.findProgramAddressSync([Buffer.from('collection'), collectionOwner.toBuffer()], sdk.program.programId)[0];
-
+        console.log('collection', collection.toBase58())
         const filters:GetProgramAccountsFilter[] = [
             {
               dataSize: 170,    //size of account (bytes)
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
             TOKEN_2022_PROGRAM_ID, //new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
             {filters: filters}
         );
-        // console.log('accounts', accounts)
+        console.log('account total', accounts.length)
         const completedTxns = [];
         if( accounts.length === 0 ) {
             return new Response(JSON.stringify({
@@ -60,26 +61,24 @@ export async function POST(request: Request) {
 
         for( let i = 0; i < accounts.length; i++ ) {
             //Parse the account data
-            const parsedAccountInfo:any = accounts[0].account.data;
+            const parsedAccountInfo:any = accounts[i].account.data;
             const mintAddress:string = parsedAccountInfo["parsed"]["info"]["mint"];
             const tokenBalance: number = parsedAccountInfo["parsed"]["info"]["tokenAmount"]["uiAmount"];
     
             const _token_metadata = await getTokenMetadata(sdk.rpcConnection, new PublicKey(mintAddress));
-            console.log('token metadata', _token_metadata)
-            if (_token_metadata!.additionalMetadata.length < 6  || tokenBalance == 0  ) {
-                return new Response(JSON.stringify({
-                    message: 'Nothing to claim'
-                }), { status: 200 });
-            }
     
+            if (_token_metadata!.additionalMetadata.length < 6  || tokenBalance == 0  ) {
+              continue;
+            }
+            console.log('all additional metadata', _token_metadata!.additionalMetadata)
             const collection_key = _token_metadata!.additionalMetadata[5][1]
     
             //Log results
-            // console.log(`Token Account No. ${0 + 1}: ${accounts[0].pubkey.toString()}`);
+            // console.log(`Token Account No. ${i + 1}: ${accounts[i].pubkey.toString()}`);
             // console.log(`--Token Mint: ${mintAddress}`);
             // console.log(`--Token Balance: ${tokenBalance}`);
             // console.log(`--Collection Key: ${collection_key}`);
-            
+    
             if( collection_key === collection.toBase58() ) {
                 console.log('We have a match: ', mintAddress)
 
@@ -88,28 +87,34 @@ export async function POST(request: Request) {
                 console.log('placeholder_metadata', placeholder_metadata)
                 
                 const additional_metadata = _token_metadata!.additionalMetadata;
+                const _mint = additional_metadata[0][1];
                 const token_id = additional_metadata[1][1];
                 console.log('placeholder mint', placeholder_mint);
                 console.log('placeholder token id', token_id);
 
-                all_token_ids.push({
-                    token_id: token_id,
-                    placeholder_mint: placeholder_mint,
-                })
-            }
 
+                all_token_ids.push({
+                    ref_id: _mint,
+                    token_id: token_id
+                });
+            }
         }
 
-        // sort the all_token_ids array and grab the element with the lowest token_id
+        console.log('all token ids', all_token_ids)
+
+        // sort the all_token_ids array and grab the element with the lowest token_id ex. [5, 3, 8, 9, 2, 1] => [1, 2, 3, 5, 8, 9]
         console.log('all_token_ids', all_token_ids)
 
-        all_token_ids.sort((a: any, b: any) => a.token_id - b.token_id);
+        all_token_ids.sort((a, b) => parseInt(a.token_id) - parseInt(b.token_id));
 
         console.log('all_token ids after sort', all_token_ids)
 
-        const { token_id, placeholder_mint } = all_token_ids[0];
-     
-
+        const {token_id, ref_id }= all_token_ids[0];
+        
+        console.log('smallest token_id', token_id , 'ref id', ref_id)
+        const placeholder = PublicKey.findProgramAddressSync([Buffer.from('placeholder'), collection.toBuffer(), new anchor.BN(ref_id).toBuffer("le", 8)], sdk.program.programId)[0];
+        const placeholder_mint = PublicKey.findProgramAddressSync([Buffer.from('mint'), placeholder.toBuffer()], sdk.program.programId)[0];
+      
             const getCollectionUrl = async(collection: PublicKey) => {
                 const collection_data = await connection.getAccountInfo(collection);
                 const collection_decode = sdk.program.coder.accounts.decode("Collection", collection_data!.data);
@@ -131,7 +136,7 @@ export async function POST(request: Request) {
                 admin, // admin
                 collectionOwner, // collection owner
                 buyer, // buyer    
-                placeholder_mint // placeholder mint address
+                new PublicKey(placeholder_mint) // placeholder mint address
             ); // returns txn signature and nft mint address
     
 

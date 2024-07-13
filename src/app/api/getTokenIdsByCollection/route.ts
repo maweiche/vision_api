@@ -11,8 +11,8 @@ export async function POST(request: Request) {
         const collectionOwner = new PublicKey(body.collectionOwner);
 
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
-        // curl -X POST http://localhost:3000/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "HZxkqBTnXtAYoFTg2puo9KyiNN42E8Sd2Kh1jq3vT29u"}'
+        // curl -X POST http://localhost:3000/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "HZxkqBTnXtAYoFTg2puo9KyiNN42E8Sd2Kh1jq3vT29u"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
               commitment: "confirmed",
               filters: [
                 memcmp_filter,
-                { dataSize: 164 }
+                // { dataSize: 170 }
               ]
           };
       
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
             sdk.program.programId, 
             get_accounts_config
           );
-          console.log('all_nfts', all_nfts)
+          // console.log('all_nfts', all_nfts[1])
       
           if(all_nfts.length === 0) {
             return new Response(JSON.stringify({
@@ -82,11 +82,12 @@ export async function POST(request: Request) {
           })
       
           console.log('all_nfts_decoded', all_nfts_decoded) 
-      
+          // filter out any null values
+          const filtered_nfts = all_nfts_decoded.filter((nft: any) => nft !== null);
           const _tokenid_list = []
-          for( let i = 0; i < all_nfts_decoded.length; i++ ) {
+          for( let i = 0; i < filtered_nfts.length; i++ ) {
             //Parse the account data
-            const nft = all_nfts_decoded[i];
+            const nft = filtered_nfts[i];
             console.log('nft', nft)
             const _nft_mint = PublicKey.findProgramAddressSync([Buffer.from('mint'), new PublicKey(nft.pubkey).toBuffer()], sdk.program.programId)[0];
             const tokenMetadata = await getTokenMetadata(connection, _nft_mint);
