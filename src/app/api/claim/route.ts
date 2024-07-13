@@ -48,7 +48,7 @@ export async function POST(request: Request) {
             TOKEN_2022_PROGRAM_ID, //new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
             {filters: filters}
         );
-
+        // console.log('accounts', accounts)
         const completedTxns = [];
         if( accounts.length === 0 ) {
             return new Response(JSON.stringify({
@@ -65,20 +65,20 @@ export async function POST(request: Request) {
             const tokenBalance: number = parsedAccountInfo["parsed"]["info"]["tokenAmount"]["uiAmount"];
     
             const _token_metadata = await getTokenMetadata(sdk.rpcConnection, new PublicKey(mintAddress));
-    
+            console.log('token metadata', _token_metadata)
             if (_token_metadata!.additionalMetadata.length < 6  || tokenBalance == 0  ) {
                 return new Response(JSON.stringify({
-                    transactions: []
+                    message: 'Nothing to claim'
                 }), { status: 200 });
             }
     
             const collection_key = _token_metadata!.additionalMetadata[5][1]
     
             //Log results
-            console.log(`Token Account No. ${0 + 1}: ${accounts[0].pubkey.toString()}`);
-            console.log(`--Token Mint: ${mintAddress}`);
-            console.log(`--Token Balance: ${tokenBalance}`);
-            console.log(`--Collection Key: ${collection_key}`);
+            // console.log(`Token Account No. ${0 + 1}: ${accounts[0].pubkey.toString()}`);
+            // console.log(`--Token Mint: ${mintAddress}`);
+            // console.log(`--Token Balance: ${tokenBalance}`);
+            // console.log(`--Collection Key: ${collection_key}`);
             
             if( collection_key === collection.toBase58() ) {
                 console.log('We have a match: ', mintAddress)
@@ -101,7 +101,12 @@ export async function POST(request: Request) {
         }
 
         // sort the all_token_ids array and grab the element with the lowest token_id
+        console.log('all_token_ids', all_token_ids)
+
         all_token_ids.sort((a: any, b: any) => a.token_id - b.token_id);
+
+        console.log('all_token ids after sort', all_token_ids)
+
         const { token_id, placeholder_mint } = all_token_ids[0];
      
 
