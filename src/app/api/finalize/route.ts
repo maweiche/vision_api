@@ -2,7 +2,7 @@ import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
 import { Keypair, Connection, PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { SDK } from '@maweiche/react-sdk';
 import base58, * as bs58 from "bs58";
-
+export const maxDuration = 86400000
 export async function POST(request: Request) {
     let sdk: SDK;
     try{
@@ -13,7 +13,8 @@ export async function POST(request: Request) {
         const placeholderMint = new PublicKey(body.placeholderMint);
 
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST http://localhost:3000/api/finalize -H "Content-Type: application/json" -d '{"collectionOwner": "9p2Zp5Uf5xGJ7rV7t2r1fQ8LwX7c9Zr7v7v7v7v7v7", "publicKey": "9p2Zp5Uf5xGJ7rV7t2r1fQ8LwX7c9Zr7v7v7v7v7v7", "placeholderMint": "9p2Zp5Uf5xGJ7rV7t2r1fQ8LwX7c9Zr7v7v7v7v7v7"}'
+        // curl -X POST http://localhost:3000/api/finalize -H "Content-Type: application/json" -d '{"collectionOwner":"6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN", "placeholderMint": "Hau7K6stC9Bg8VhJZn6uwsHWaoG7AV9TKHwyEXe1tWSi"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/finalize -H "Content-Type: application/json" -d '{"collectionOwner":"6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN", "placeholderMint": "D1enY4yMQpkTaqyxy5vWp4zTrGSEY7587agpqNteBGXz"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 

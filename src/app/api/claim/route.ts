@@ -4,7 +4,7 @@ import { Keypair, Connection, PublicKey, GetProgramAccountsFilter } from '@solan
 import { TOKEN_2022_PROGRAM_ID, getTokenMetadata } from "@solana/spl-token";
 import { SDK } from '@maweiche/react-sdk';
 import base58, * as bs58 from "bs58";
-
+export const maxDuration = 86400000
 export async function POST(request: Request) {
     let sdk: SDK;
     try{
@@ -14,7 +14,8 @@ export async function POST(request: Request) {
         const buyer = new PublicKey(body.publicKey);
         
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST http://localhost:3000/api/claim -H "Content-Type: application/json" -d '{"collectionOwner": "HZxkqBTnXtAYoFTg2puo9KyiNN42E8Sd2Kh1jq3vT29u", "publicKey": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
+        // curl -X POST http://localhost:3000/api/claim -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/claim -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 

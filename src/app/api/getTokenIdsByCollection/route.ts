@@ -11,9 +11,9 @@ export async function POST(request: Request) {
         const collectionOwner = new PublicKey(body.collectionOwner);
 
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "HZxkqBTnXtAYoFTg2puo9KyiNN42E8Sd2Kh1jq3vT29u"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9"}'
         // curl -X POST http://localhost:3000/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "HZxkqBTnXtAYoFTg2puo9KyiNN42E8Sd2Kh1jq3vT29u"}'
-
+        // curl -X POST https://vision-api-ecru.vercel.app/api/claim -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN"}'
         const keypair1 = process.env.ADMINKEYPAIR as string;
 
         const admin = Keypair.fromSecretKey(base58.decode(keypair1));
@@ -30,6 +30,7 @@ export async function POST(request: Request) {
         const collection = PublicKey.findProgramAddressSync([Buffer.from('collection'), collectionOwner.toBuffer()], sdk.program.programId)[0];
         // const collection = new PublicKey("2xYCWnRvpVf2yk2PcPphJzABqn7PQ4FWmAjWHKXKXp22")
         console.log('sdk program', sdk.program.programId.toBase58())
+        console.log('collection owner', collectionOwner.toBase58())
         console.log('collection', collection.toBase58())
 
         const memcmp_filter: MemcmpFilter = {
@@ -64,8 +65,7 @@ export async function POST(request: Request) {
                   if(!decode) {
                     return null;
                   }
-                  console.log('decode', decode)
-                  
+                  console.log('decoded nft', decode)
                    return {
                       pubkey: nft.pubkey.toBase58(),
                       id: Number (decode.id),
@@ -80,10 +80,12 @@ export async function POST(request: Request) {
                   return null;
               }
           })
-      
+          // filter out any null values
+          
           console.log('all_nfts_decoded', all_nfts_decoded) 
           // filter out any null values
           const filtered_nfts = all_nfts_decoded.filter((nft: any) => nft !== null);
+          console.log('filtered_nfts', filtered_nfts)
           const _tokenid_list = []
           for( let i = 0; i < filtered_nfts.length; i++ ) {
             //Parse the account data
