@@ -25,7 +25,7 @@ export async function POST(request: Request) {
             adminWallet as NodeWallet,
             connection,
             { skipPreflight: true},
-            "devnet",
+            "mainnet-beta",
         );
         const collection = PublicKey.findProgramAddressSync([Buffer.from('collection'), collectionOwner.toBuffer()], sdk.program.programId)[0];
         // const collection = new PublicKey("2xYCWnRvpVf2yk2PcPphJzABqn7PQ4FWmAjWHKXKXp22")

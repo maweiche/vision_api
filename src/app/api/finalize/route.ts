@@ -30,7 +30,7 @@ export async function POST(request: Request) {
             adminWallet as NodeWallet,
             connection,
             { skipPreflight: true},
-            "devnet",
+            "mainnet-beta",
         );
         const {tx_signature, nft_mint} = await sdk.nft.createNft(
             connection,  // connection: Connection,

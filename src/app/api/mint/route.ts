@@ -27,7 +27,7 @@ export async function POST(request: Request) {
             adminWallet as NodeWallet,
             connection,
             { skipPreflight: true},
-            "devnet",
+            "mainnet-beta",
         );
         const data = await sdk.placeholder.createPlaceholder(
             admin,

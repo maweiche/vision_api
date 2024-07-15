@@ -24,7 +24,7 @@ export async function POST(request: Request) {
             adminWallet as NodeWallet,
             connection,
             { skipPreflight: true},
-            "devnet",
+            "mainnet-beta",
         );
         const collection = await sdk.collection.getCollectionByOwner(
             connection, // connection
