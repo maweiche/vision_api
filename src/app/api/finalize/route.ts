@@ -13,8 +13,8 @@ export async function POST(request: Request) {
         const placeholderMint = new PublicKey(body.placeholderMint);
 
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST http://localhost:3000/api/finalize -H "Content-Type: application/json" -d '{"collectionOwner":"6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN", "placeholderMint": "Hau7K6stC9Bg8VhJZn6uwsHWaoG7AV9TKHwyEXe1tWSi"}'
-        // curl -X POST https://vision-api-ecru.vercel.app/api/finalize -H "Content-Type: application/json" -d '{"collectionOwner":"6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN", "placeholderMint": "D1enY4yMQpkTaqyxy5vWp4zTrGSEY7587agpqNteBGXz"}'
+        // curl -X POST http://localhost:3000/api/finalize -H "Content-Type: application/json" -d '{"collectionOwner":"BPDAKKFoFbeoHUqdMrLNuceCeDhTqsHvkZNmNtSdtnuZ", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN", "placeholderMint": "fmVviymbWGsGo1CCsPBAEo1XqHeWPZSK5UuPjsJAGFa"}'
+        // curl -X POST https://vision-api-ecru.vercel.app/api/finalize -H "Content-Type: application/json" -d '{"collectionOwner":"BPDAKKFoFbeoHUqdMrLNuceCeDhTqsHvkZNmNtSdtnuZ", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN", "placeholderMint": "fmVviymbWGsGo1CCsPBAEo1XqHeWPZSK5UuPjsJAGFa"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
 
