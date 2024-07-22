@@ -9,22 +9,17 @@ export async function POST(request: Request) {
     let sdk: SDK;
     try{
         const body = await request.json();
-        
         const collectionOwner = new PublicKey(body.collectionOwner);
         const buyer = new PublicKey(body.publicKey);
         
         // CREATE A curl command with the above body to this endpoint
-        // curl -X POST http://localhost:3000/api/claim -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN"}'
+        // curl -X POST http://localhost:3000/api/claim -H "Content-Type: application/json" -d '{"collectionOwner": "7W2vzzJ1FJmK3F7sct1wbWQuzGa8APeUp8ocHr6uJcmF", "publicKey": "7wK3jPMYjpZHZAghjersW6hBNMgi9VAGr75AhYRqR2n"}'
         // curl -X POST https://vision-api-ecru.vercel.app/api/claim -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
-
         const admin = Keypair.fromSecretKey(base58.decode(keypair1));
-
         const adminWallet = new NodeWallet(admin);
 
-        
-        
         const connection = new Connection(process.env.RPC!, 'confirmed')
 
         sdk = new SDK(
@@ -33,9 +28,8 @@ export async function POST(request: Request) {
             { skipPreflight: true},
             "mainnet-beta",
         );
+        const collection = new PublicKey('HQEhYb1qrNYdaVzBGovVtCtrtYJ1rezzKARQ5peve8is')
 
-        const collection = PublicKey.findProgramAddressSync([Buffer.from('collection'), collectionOwner.toBuffer()], sdk.program.programId)[0];
-        console.log('collection', collection.toBase58())
         const filters:GetProgramAccountsFilter[] = [
             {
               dataSize: 170,    //size of account (bytes)
@@ -73,7 +67,7 @@ export async function POST(request: Request) {
             }
             console.log('all additional metadata', _token_metadata!.additionalMetadata)
             const collection_key = _token_metadata!.additionalMetadata[5][1]
-    
+            console.log('collection key', collection_key)
             //Log results
             // console.log(`Token Account No. ${i + 1}: ${accounts[i].pubkey.toString()}`);
             // console.log(`--Token Mint: ${mintAddress}`);

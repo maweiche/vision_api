@@ -14,10 +14,9 @@ export async function POST(request: Request) {
         // curl -X POST https://vision-api-ecru.vercel.app/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9"}'
         // curl -X POST http://localhost:3000/api/getTokenIdsByCollection -H "Content-Type: application/json" -d '{"collectionOwner": "HZxkqBTnXtAYoFTg2puo9KyiNN42E8Sd2Kh1jq3vT29u"}'
         // curl -X POST https://vision-api-ecru.vercel.app/api/claim -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN"}'
+        
         const keypair1 = process.env.ADMINKEYPAIR as string;
-
         const admin = Keypair.fromSecretKey(base58.decode(keypair1));
-
         const adminWallet = new NodeWallet(admin);
         
         const connection = new Connection(process.env.RPC!, 'confirmed')
@@ -81,11 +80,8 @@ export async function POST(request: Request) {
               }
           })
           // filter out any null values
-          
-          console.log('all_nfts_decoded', all_nfts_decoded) 
-          // filter out any null values
           const filtered_nfts = all_nfts_decoded.filter((nft: any) => nft !== null);
-          console.log('filtered_nfts', filtered_nfts)
+
           const _tokenid_list = []
           for( let i = 0; i < filtered_nfts.length; i++ ) {
             //Parse the account data
@@ -102,10 +98,11 @@ export async function POST(request: Request) {
       
             console.log('token_id', token_id)
       
-            _tokenid_list.push(token_id)
+            _tokenid_list.push({
+              token_id: token_id,
+              mint: _nft_mint.toBase58(),
+            })
           }
-      
-          console.log('complete token list', _tokenid_list)
         
         return new Response(JSON.stringify({
             tokenIds: _tokenid_list

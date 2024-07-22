@@ -8,19 +8,17 @@ export async function POST(request: Request) {
     let sdk: SDK;
     try{
         const body = await request.json();
-        
         const collectionOwner = new PublicKey(body.collectionOwner);
         const buyer = new PublicKey(body.publicKey);
         
         // CREATE A curl command with the above body to this endpoint
         // curl -X POST https://vision-api-ecru.vercel.app/api/getClaims -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN"}'
         // curl -X POST http://localhost:3000/api/getClaims -H "Content-Type: application/json" -d '{"collectionOwner": "HZxkqBTnXtAYoFTg2puo9KyiNN42E8Sd2Kh1jq3vT29u", "publicKey": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
-        // curl -X POST https://vision-api-ecru.vercel.app/api/mint -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN"}'
+        // curl -X POST http://localhost:3000/api/getClaims -H "Content-Type: application/json" -d '{"collectionOwner": "7W2vzzJ1FJmK3F7sct1wbWQuzGa8APeUp8ocHr6uJcmF", "publicKey": "7wK3jPMYjpZHZAghjersW6hBNMgi9VAGr75AhYRqR2n"}'
         // curl -X POST https://vision-api-ecru.vercel.app/api/finalize -H "Content-Type: application/json" -d '{"collectionOwner": "6DgMcaPTjSvgSkPfNN71u1i1T1fmfYAbLovE1MgJ1kq9", "publicKey": "DEVJb1nq3caksGybAFxoxsYXLi9nyp8ZQnmAFmfAYMSN", "placeholder_mint": ""}'
+        
         const keypair1 = process.env.ADMINKEYPAIR as string;
-
         const admin = Keypair.fromSecretKey(base58.decode(keypair1));
-
         const adminWallet = new NodeWallet(admin);
 
         

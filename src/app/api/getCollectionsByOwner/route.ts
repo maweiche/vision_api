@@ -13,11 +13,9 @@ export async function POST(request: Request) {
         // curl -X POST https://vision-api-ecru.vercel.app/api/getCollectionsByOwner -H "Content-Type: application/json" -d '{"collectionOwner": "6KuX26FZqzqpsHDLfkXoBXbQRPEDEbstqNiPBKHNJQ9e"}'
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
-
         const admin = Keypair.fromSecretKey(base58.decode(keypair1));
-
         const adminWallet = new NodeWallet(admin);
-        
+
         const connection = new Connection(process.env.RPC!, 'confirmed')
 
         sdk = new SDK(

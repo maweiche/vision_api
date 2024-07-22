@@ -6,19 +6,14 @@ import base58, * as bs58 from "bs58";
 export async function POST(request: Request) {
     let sdk: SDK;
     try{
-        console.log('request', request);
         const body = await request.json();
-        console.log('body', body);
         const id = body.id;
         const collectionOwner = new PublicKey(body.collectionOwner);
         
 
         const keypair1 = process.env.ADMINKEYPAIR as string;
-
         const admin = Keypair.fromSecretKey(base58.decode(keypair1));
-
         const adminWallet = new NodeWallet(admin);
-
         const buyer = new PublicKey(body.publicKey);
         
         const connection = new Connection(process.env.RPC!, 'confirmed')
@@ -35,7 +30,6 @@ export async function POST(request: Request) {
             buyer,
             id,
         );
-        console.log('data', data);
 
         const tx = new Transaction(
             {
@@ -46,14 +40,13 @@ export async function POST(request: Request) {
 
         tx.add(...data.instructions)
         tx.partialSign(admin);
-        console.log('tx', tx)
         const serializedTransaction = tx.serialize({
             requireAllSignatures: false,
         });
-        console.log('about to serialize transaction')
+
         const base64 = serializedTransaction.toString("base64");
         const base64JSON = JSON.stringify(base64);
-        console.log('base64JSON', base64JSON);
+
         return new Response(JSON.stringify({
             transaction: base64JSON as string,
             placeholder_mint: data.placeholder_mint.toBase58() as string,
