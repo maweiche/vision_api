@@ -90,3 +90,17 @@ RESPONSE:
     }]
 }
 ```
+
+## Help
+
+Please reach out on Telegram or Twitter.
+
+## Authors
+
+Contributors names and contact info
+
+[Matt Weichel](https://github.com/maweiche)
+
+## License
+
+Vision API is licensed under the [MIT License](https://github.com/playground-solana/vision_api/LICENSE).
